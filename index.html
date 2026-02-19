@@ -3,53 +3,60 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Shollyven Properties | ERP</title>
+    <title>Shollyven Properties | ERP Manager</title>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-slate-50 text-slate-900 font-sans p-4 lg:p-10">
+<body class="bg-slate-50 text-slate-900 font-sans p-4 lg:p-8">
 
     <div class="max-w-6xl mx-auto">
-        <header class="flex flex-col md:flex-row justify-between items-center mb-10 bg-white p-8 rounded-3xl shadow-sm border-b-8 border-green-700">
+        <header class="flex flex-col md:flex-row justify-between items-center mb-8 bg-white p-6 rounded-3xl shadow-sm border-b-8 border-green-700">
             <div>
-                <h1 class="text-4xl font-black text-green-900 tracking-tighter uppercase">Shollyven Properties</h1>
-                <p id="syncStatus" class="text-xs font-bold text-slate-400 mt-2 uppercase italic">Cloud Sync Active</p>
+                <h1 class="text-3xl font-black text-green-900 tracking-tighter uppercase">Shollyven Properties</h1>
+                <p id="syncStatus" class="text-[10px] font-bold text-slate-400 mt-1 uppercase italic">Auto-Sync Enabled</p>
             </div>
-            <div class="flex gap-3 mt-4 md:mt-0">
-                <button onclick="showSection('buildings')" class="bg-slate-800 text-white px-6 py-3 rounded-2xl font-bold hover:bg-black transition">🏢 Buildings</button>
-                <button onclick="showSection('tenants')" class="bg-green-700 text-white px-6 py-3 rounded-2xl font-bold hover:bg-green-800 transition">👥 Tenants</button>
+            <div class="flex gap-2 mt-4 md:mt-0">
+                <button onclick="showSection('buildings')" class="bg-slate-800 text-white px-5 py-2.5 rounded-xl font-bold text-sm hover:bg-black transition">🏢 Manage Buildings</button>
+                <button onclick="showSection('tenants')" class="bg-green-700 text-white px-5 py-2.5 rounded-xl font-bold text-sm hover:bg-green-800 transition">👥 Manage Tenants</button>
             </div>
         </header>
 
-        <section id="buildingsSection" class="hidden animate-in fade-in duration-500">
+        <section id="buildingsSection" class="hidden">
             <div class="grid lg:grid-cols-3 gap-8">
                 <div class="bg-white p-6 rounded-2xl shadow-md border border-slate-100 h-fit">
-                    <h2 class="font-black uppercase text-slate-400 text-xs mb-4 tracking-widest">Register New Property</h2>
-                    <input id="newBldgName" type="text" placeholder="Building Name (e.g. Block A)" class="w-full bg-slate-50 p-4 rounded-xl mb-3 outline-none focus:ring-2 ring-green-500">
-                    <input id="newBldgAddress" type="text" placeholder="Address" class="w-full bg-slate-50 p-4 rounded-xl mb-4 outline-none">
-                    <button onclick="addBuilding()" class="w-full bg-slate-900 text-white py-4 rounded-xl font-black uppercase tracking-tight hover:bg-black">Create Building</button>
+                    <h2 class="font-black uppercase text-slate-400 text-[10px] mb-4 tracking-widest">Register New Property Asset</h2>
+                    <input id="newBldgName" type="text" placeholder="Building Name (e.g. Shollyven Plaza)" class="w-full bg-slate-50 p-4 rounded-xl mb-3 outline-none focus:ring-2 ring-green-500">
+                    <button onclick="addBuilding()" class="w-full bg-slate-900 text-white py-4 rounded-xl font-black uppercase text-xs hover:bg-black">Add to Portfolio</button>
                 </div>
                 <div class="lg:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-4" id="buildingsList"></div>
             </div>
         </section>
 
-        <section id="tenantsSection" class="animate-in fade-in duration-500">
+        <section id="tenantsSection">
             <div class="grid lg:grid-cols-3 gap-8">
                 <div class="bg-white p-6 rounded-2xl shadow-md border border-slate-100 h-fit">
-                    <h2 class="font-black uppercase text-slate-400 text-xs mb-4 tracking-widest">Assign Tenant to Building</h2>
-                    <select id="tBldgSelect" class="w-full bg-slate-50 p-4 rounded-xl mb-3 font-bold text-green-700 outline-none">
-                        <option value="">-- Select Building --</option>
-                    </select>
-                    <input id="tName" type="text" placeholder="Tenant Full Name" class="w-full bg-slate-50 p-4 rounded-xl mb-3 outline-none">
-                    <input id="tPhone" type="text" placeholder="WhatsApp Number" class="w-full bg-slate-50 p-4 rounded-xl mb-3 outline-none">
-                    <input id="tRent" type="number" placeholder="Rent Amount (₦)" class="w-full bg-slate-50 p-4 rounded-xl mb-3 outline-none font-bold">
+                    <h2 class="font-black uppercase text-slate-400 text-[10px] mb-4 tracking-widest">Execute New Lease Agreement</h2>
+                    <select id="tBldgSelect" class="w-full bg-slate-50 p-4 rounded-xl mb-3 font-bold text-green-700 outline-none"></select>
+                    <input id="tName" type="text" placeholder="Tenant Legal Name" class="w-full bg-slate-50 p-4 rounded-xl mb-3 outline-none">
+                    <input id="tPhone" type="text" placeholder="WhatsApp Number (e.g. 234...)" class="w-full bg-slate-50 p-4 rounded-xl mb-3 outline-none">
+                    <input id="tRent" type="number" placeholder="Agreed Rent (₦)" class="w-full bg-slate-50 p-4 rounded-xl mb-3 outline-none font-bold">
+                    
                     <div class="grid grid-cols-2 gap-2 mb-4">
-                        <input id="tDate" type="date" class="bg-slate-50 p-4 rounded-xl text-xs">
-                        <input id="tTerm" type="number" value="1" placeholder="Yrs" class="bg-slate-50 p-4 rounded-xl text-center font-bold">
+                        <div class="flex flex-col">
+                            <label class="text-[9px] font-bold text-slate-400 uppercase ml-2">Lease Period (Yrs)</label>
+                            <input id="tTerm" type="number" value="1" class="bg-slate-50 p-4 rounded-xl text-center font-bold">
+                        </div>
+                        <div class="flex flex-col">
+                            <label class="text-[9px] font-bold text-slate-400 uppercase ml-2">Commencement</label>
+                            <input id="tDate" type="date" class="bg-slate-50 p-4 rounded-xl text-xs font-bold">
+                        </div>
                     </div>
-                    <button onclick="addTenant()" class="w-full bg-green-700 text-white py-4 rounded-xl font-black uppercase hover:bg-green-900">Assign & Sync</button>
+                    <button onclick="addTenant()" class="w-full bg-green-700 text-white py-4 rounded-xl font-black uppercase text-xs hover:bg-green-900">Sign Lease & Sync</button>
                 </div>
+                
                 <div class="lg:col-span-2 space-y-4">
-                    <input id="search" onkeyup="render()" type="text" placeholder="🔍 Search tenants or buildings..." class="w-full p-5 rounded-2xl bg-white shadow-sm outline-none mb-4 focus:ring-4 ring-green-100">
+                    <div class="flex gap-2 mb-4">
+                        <input id="search" onkeyup="render()" type="text" placeholder="🔍 Search by Building or Tenant..." class="flex-1 p-5 rounded-2xl bg-white shadow-sm outline-none focus:ring-4 ring-green-100 font-medium">
+                    </div>
                     <div id="tenantList" class="space-y-4"></div>
                 </div>
             </div>
@@ -57,8 +64,10 @@
     </div>
 
     <script>
-        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbybmp5n2jZHNKskudPSoJhb1Le_gby66FVZnRqGqNSXm0AGCaehhVFSIvrlzvpFLtHy/exec";
-        let data = JSON.parse(localStorage.getItem('shollyven_data')) || { buildings: [], tenants: [] };
+        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbybBAHxP6vU7CyGbqgCVIsKyYrIH0HcTHDQcyJByLrdnyirCT865AkNkurmQHW-wFFG/exec";
+        let data = JSON.parse(localStorage.getItem('shollyven_erp')) || { buildings: [], tenants: [] };
+
+        window.onload = async () => { render(); await syncFromCloud(); };
 
         function showSection(sect) {
             document.getElementById('buildingsSection').classList.toggle('hidden', sect !== 'buildings');
@@ -67,25 +76,47 @@
         }
 
         async function triggerSync() {
+            if (SCRIPT_URL.includes("PASTE_YOUR")) return;
             document.getElementById('syncStatus').innerText = "⏳ Syncing...";
             try {
                 await fetch(SCRIPT_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify(data) });
-                document.getElementById('syncStatus').innerText = "✅ Cloud Updated: " + new Date().toLocaleTimeString();
-            } catch (e) { document.getElementById('syncStatus').innerText = "⚠️ Offline Mode"; }
+                document.getElementById('syncStatus').innerText = "✅ Cloud Backup Secure: " + new Date().toLocaleTimeString();
+            } catch (e) { document.getElementById('syncStatus').innerText = "⚠️ Offline: Saving Locally"; }
+        }
+
+        async function syncFromCloud() {
+            if (SCRIPT_URL.includes("PASTE_YOUR")) return;
+            try {
+                const res = await fetch(SCRIPT_URL);
+                const cloudData = await res.json();
+                if (cloudData && (cloudData.buildings || cloudData.tenants)) {
+                    data = cloudData;
+                    localStorage.setItem('shollyven_erp', JSON.stringify(data));
+                    render();
+                }
+            } catch (e) { console.log("Cloud pull skipped."); }
         }
 
         function addBuilding() {
             const name = document.getElementById('newBldgName').value;
-            if (!name) return alert("Enter building name");
-            data.buildings.push({ id: Date.now(), name, address: document.getElementById('newBldgAddress').value });
+            if (!name) return alert("Building name required");
+            data.buildings.push({ id: Date.now(), name });
             saveAndRefresh();
+            document.getElementById('newBldgName').value = "";
+        }
+
+        function deleteBuilding(id) {
+            if (confirm("Delete this property? All associated tenants will be unassigned.")) {
+                data.buildings = data.buildings.filter(b => b.id !== id);
+                saveAndRefresh();
+            }
         }
 
         function addTenant() {
             const bldg = document.getElementById('tBldgSelect').value;
             const name = document.getElementById('tName').value;
             const rent = document.getElementById('tRent').value;
-            if (!bldg || !name || !rent) return alert("Assign to a building first!");
+            if (!bldg || !name || !rent) return alert("Select a Building and enter Tenant details!");
 
             data.tenants.push({ 
                 id: Date.now(), buildingId: bldg, name, 
@@ -94,49 +125,77 @@
                 term: parseInt(document.getElementById('tTerm').value)
             });
             saveAndRefresh();
+            ['tName', 'tPhone', 'tRent', 'tDate'].forEach(id => document.getElementById(id).value = "");
+        }
+
+        function deleteTenant(id) {
+            if (confirm("Confirm Tenant Move-out? This will delete the lease record permanently.")) {
+                data.tenants = data.tenants.filter(t => t.id !== id);
+                saveAndRefresh();
+            }
         }
 
         function saveAndRefresh() {
-            localStorage.setItem('shollyven_data', JSON.stringify(data));
+            localStorage.setItem('shollyven_erp', JSON.stringify(data));
             render();
             triggerSync();
         }
 
         function render() {
-            // Render Buildings List
+            // Render Buildings
             const bList = document.getElementById('buildingsList');
             bList.innerHTML = data.buildings.map(b => `
-                <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
-                    <h3 class="font-black text-xl uppercase">${b.name}</h3>
-                    <p class="text-xs text-slate-400 font-bold uppercase">${data.tenants.filter(t => t.buildingId == b.id).length} Active Tenants</p>
+                <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex justify-between items-center group">
+                    <div>
+                        <h3 class="font-black text-xl uppercase tracking-tighter text-slate-800">${b.name}</h3>
+                        <p class="text-[10px] text-slate-400 font-bold uppercase">${data.tenants.filter(t => t.buildingId == b.id).length} Active Leases</p>
+                    </div>
+                    <button onclick="deleteBuilding(${b.id})" class="text-slate-300 hover:text-red-500 transition-colors">🗑️</button>
                 </div>
             `).join('');
 
-            // Update Dropdown
+            // Dropdown Update
             const select = document.getElementById('tBldgSelect');
-            select.innerHTML = '<option value="">-- Select Building --</option>' + 
+            select.innerHTML = '<option value="">-- Select Asset Building --</option>' + 
                 data.buildings.map(b => `<option value="${b.id}">${b.name}</option>`).join('');
 
-            // Render Tenant List
-            const searchTerm = document.getElementById('search').value.toLowerCase();
-            const filtered = data.tenants.filter(t => t.name.toLowerCase().includes(searchTerm));
+            // Tenant Rendering
+            const search = document.getElementById('search').value.toLowerCase();
+            const filtered = data.tenants.filter(t => {
+                const b = data.buildings.find(b => b.id == t.buildingId);
+                return t.name.toLowerCase().includes(search) || (b && b.name.toLowerCase().includes(search));
+            });
+
             const tList = document.getElementById('tenantList');
+            if (filtered.length === 0) {
+                tList.innerHTML = `<div class="p-20 text-center bg-white rounded-3xl border-2 border-dashed border-slate-200 text-slate-300 font-black uppercase">Zero Active Records</div>`;
+                return;
+            }
 
             tList.innerHTML = filtered.map(t => {
                 const bldg = data.buildings.find(b => b.id == t.buildingId);
+                const expiry = new Date(t.date);
+                expiry.setFullYear(expiry.getFullYear() + t.term);
+                const isOverdue = expiry < new Date();
+
                 return `
-                    <div class="bg-white p-6 rounded-2xl shadow-sm border-l-8 border-green-600 flex justify-between items-center">
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border-l-8 ${isOverdue ? 'border-red-500' : 'border-green-600'} flex justify-between items-center transition-all hover:shadow-md">
                         <div>
-                            <span class="text-[9px] font-black bg-slate-100 px-2 py-1 rounded uppercase">${bldg ? bldg.name : 'Unknown'}</span>
-                            <h3 class="text-xl font-black uppercase text-slate-800">${t.name}</h3>
-                            <p class="text-green-700 font-bold">₦${t.rent.toLocaleString()}</p>
+                            <span class="text-[8px] font-black bg-slate-100 text-slate-500 px-2 py-0.5 rounded uppercase">${bldg ? bldg.name : 'Unknown Building'}</span>
+                            <h3 class="text-xl font-black uppercase text-slate-800 mt-1">${t.name}</h3>
+                            <div class="flex gap-4 items-center">
+                                <p class="text-green-700 font-black">₦${t.rent.toLocaleString(undefined, {minimumFractionDigits: 2})}</p>
+                                <p class="text-[9px] font-bold text-slate-400 uppercase tracking-widest">Expires: ${expiry.toDateString()}</p>
+                            </div>
                         </div>
-                        <button onclick="window.open('https://wa.me/${t.phone}')" class="bg-green-50 text-green-700 px-4 py-2 rounded-xl font-bold text-xs uppercase">Message</button>
+                        <div class="flex gap-2">
+                            <button onclick="window.open('https://wa.me/${t.phone}')" class="bg-green-50 text-green-700 px-4 py-2 rounded-xl font-black text-[10px] uppercase hover:bg-green-100">WhatsApp</button>
+                            <button onclick="deleteTenant(${t.id})" class="text-slate-200 hover:text-red-500 p-2 transition-colors">🗑️</button>
+                        </div>
                     </div>
                 `;
             }).join('');
         }
-        render();
     </script>
 </body>
 </html>
