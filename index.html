@@ -3,75 +3,78 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Shollyven Properties - Live Manager</title>
+    <title>Shollyven Properties | Enterprise</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap');
+        body { font-family: 'Inter', sans-serif; }
+    </style>
 </head>
-<body class="bg-slate-100 p-4 md:p-8 font-sans text-slate-800">
+<body class="bg-slate-50 text-slate-900 p-4">
 
-    <div id="app" class="max-w-6xl mx-auto">
-        <div class="flex flex-col md:flex-row justify-between items-center mb-6 gap-4 bg-white p-6 rounded-3xl shadow-sm border-b-4 border-green-700">
+    <div class="max-w-5xl mx-auto">
+        <header class="bg-white p-6 rounded-3xl shadow-sm border-b-4 border-green-600 mb-6 flex flex-col md:flex-row justify-between items-center gap-4">
             <div>
-                <h1 class="text-3xl font-black text-green-900 tracking-tight uppercase">Shollyven Properties</h1>
-                <p id="syncStatus" class="text-slate-400 text-[10px] font-bold uppercase mt-1 italic">🔄 Automatic Cloud Sync Active</p>
+                <h1 class="text-3xl font-black tracking-tighter text-green-800 uppercase">Shollyven Properties</h1>
+                <p id="syncStatus" class="text-[10px] font-bold text-slate-400 uppercase tracking-widest italic">Sync Status: Online</p>
             </div>
-        </div>
+            <div class="flex gap-2">
+                <button onclick="syncFromCloud()" class="bg-slate-100 text-slate-600 px-4 py-2 rounded-xl text-xs font-bold hover:bg-slate-200 transition">🔄 Force Refresh</button>
+            </div>
+        </header>
 
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-            <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 text-center">
-                <p class="text-slate-400 text-[10px] font-black uppercase">Portfolio Value</p>
-                <h2 id="totalPortfolio" class="text-2xl font-black text-slate-800">₦0.00</h2>
+        <section class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+            <div class="bg-green-600 text-white p-6 rounded-2xl shadow-lg">
+                <p class="text-[10px] font-bold uppercase opacity-80">Annual Revenue (Expected)</p>
+                <h2 id="totalPortfolio" class="text-3xl font-black mt-1">₦0.00</h2>
             </div>
-            <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 text-center">
-                <p class="text-green-600 text-[10px] font-black uppercase">Collected Rent</p>
-                <h2 id="totalCollected" class="text-2xl font-black text-green-700">₦0.00</h2>
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
+                <p class="text-slate-400 text-[10px] font-bold uppercase">Active Tenancies</p>
+                <h2 id="unitCount" class="text-3xl font-black text-slate-800 mt-1">0</h2>
             </div>
-            <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 text-center">
-                <p class="text-blue-600 text-[10px] font-black uppercase">Units</p>
-                <h2 id="unitCount" class="text-2xl font-black text-blue-700">0 Units</h2>
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
+                <p class="text-red-500 text-[10px] font-bold uppercase">Maintenance Requests</p>
+                <h2 id="maintCount" class="text-3xl font-black text-slate-800 mt-1">0</h2>
             </div>
-        </div>
+        </section>
 
-        <div class="grid lg:grid-cols-3 gap-8">
-            <div class="bg-white p-6 rounded-2xl shadow-xl border border-slate-100 h-fit">
-                <h2 class="text-lg font-black mb-4 text-slate-700 border-b pb-2 uppercase tracking-tighter">Register Tenancy</h2>
-                <div class="space-y-4">
-                    <input id="propName" type="text" placeholder="Building Name (e.g. Plaza A)" class="w-full border-2 border-slate-100 p-3 rounded-xl outline-none focus:border-green-500 transition">
-                    <input id="tenantName" type="text" placeholder="Tenant Full Name" class="w-full border-2 border-slate-100 p-3 rounded-xl outline-none focus:border-green-500 transition">
-                    <input id="tenantPhone" type="text" placeholder="WhatsApp Number" class="w-full border-2 border-slate-100 p-3 rounded-xl outline-none focus:border-green-500 transition">
-                    <input id="rentAmount" type="number" placeholder="Rent Amount (₦)" class="w-full border-2 border-slate-100 p-3 rounded-xl outline-none font-bold text-green-700">
-                    <div class="grid grid-cols-2 gap-2">
-                        <input id="leaseTerm" type="number" value="1" placeholder="Yrs" class="border-2 border-slate-100 p-3 rounded-xl text-center font-bold">
-                        <input id="startDate" type="date" class="border-2 border-slate-100 p-3 rounded-xl text-xs">
+        <main class="grid lg:grid-cols-3 gap-8">
+            <aside class="space-y-6">
+                <div class="bg-white p-6 rounded-2xl shadow-md border border-slate-100">
+                    <h3 class="text-xs font-black text-slate-400 uppercase mb-4 tracking-widest border-b pb-2">New Tenant Entry</h3>
+                    <div class="space-y-3">
+                        <input id="propName" type="text" placeholder="Building/Unit Name" class="w-full bg-slate-50 border-2 border-transparent focus:border-green-500 p-3 rounded-xl outline-none text-sm transition">
+                        <input id="tenantName" type="text" placeholder="Tenant Name" class="w-full bg-slate-50 border-2 border-transparent focus:border-green-500 p-3 rounded-xl outline-none text-sm transition">
+                        <input id="tenantPhone" type="text" placeholder="WhatsApp (e.g. 23480...)" class="w-full bg-slate-50 border-2 border-transparent focus:border-green-500 p-3 rounded-xl outline-none text-sm transition">
+                        <input id="rentAmount" type="number" placeholder="Rent Amount (₦)" class="w-full bg-slate-50 border-2 border-transparent focus:border-green-500 p-3 rounded-xl outline-none text-sm font-bold text-green-700">
+                        <div class="grid grid-cols-2 gap-2">
+                            <input id="leaseTerm" type="number" value="1" title="Years" class="bg-slate-50 p-3 rounded-xl text-center font-bold">
+                            <input id="startDate" type="date" class="bg-slate-50 p-3 rounded-xl text-xs">
+                        </div>
+                        <button onclick="registerTenant()" class="w-full bg-green-700 text-white py-4 rounded-2xl font-black hover:bg-green-800 shadow-xl active:scale-95 transition-all">REGISTER & SYNC</button>
                     </div>
-                    <button onclick="registerTenant()" class="w-full bg-green-700 text-white py-4 rounded-2xl font-black hover:bg-green-800 shadow-lg active:scale-95 transition-all">ADD & SYNC TO CLOUD</button>
                 </div>
-            </div>
+            </aside>
 
             <div class="lg:col-span-2 space-y-4">
-                <input id="searchInput" type="text" onkeyup="render()" placeholder="🔍 Search tenant or building..." 
-                       class="w-full bg-white border-2 border-slate-200 p-4 rounded-2xl outline-none shadow-sm font-medium mb-2">
+                <div class="flex gap-2">
+                    <input id="searchInput" type="text" onkeyup="render()" placeholder="🔍 Search records..." class="flex-1 bg-white p-4 rounded-2xl shadow-sm outline-none focus:ring-2 ring-green-500">
+                </div>
                 <div id="tenantList" class="space-y-4"></div>
             </div>
-        </div>
+        </main>
     </div>
 
     <script>
-        // CRITICAL: Ensure your Google Script URL is here
+        // REPLACE WITH YOUR GOOGLE URL
         const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbybmp5n2jZHNKskudPSoJhb1Le_gby66FVZnRqGqNSXm0AGCaehhVFSIvrlzvpFLtHy/exec";
 
         let tenants = JSON.parse(localStorage.getItem('tenants')) || [];
 
-        // --- AUTOMATION BRAIN ---
+        window.onload = async () => { render(); await syncFromCloud(); };
 
-        // 1. Auto-Load on startup (Mobile Sync)
-        window.onload = async () => {
-            render();
-            await syncFromCloud();
-        };
-
-        // 2. Auto-Save to Cloud
         async function triggerAutoSync() {
-            document.getElementById('syncStatus').innerText = "⏳ Cloud syncing...";
+            document.getElementById('syncStatus').innerText = "⏳ Syncing to Cloud...";
             try {
                 await fetch(SCRIPT_URL, {
                     method: 'POST',
@@ -79,9 +82,9 @@
                     headers: { 'Content-Type': 'text/plain' },
                     body: JSON.stringify(tenants)
                 });
-                document.getElementById('syncStatus').innerText = "✅ All data backed up to Cloud";
+                document.getElementById('syncStatus').innerText = "✅ Cloud Updated: " + new Date().toLocaleTimeString();
             } catch (e) {
-                document.getElementById('syncStatus').innerText = "⚠️ Offline: Saving locally only";
+                document.getElementById('syncStatus').innerText = "⚠️ Saving Locally Only (Offline)";
             }
         }
 
@@ -90,38 +93,32 @@
             try {
                 const res = await fetch(SCRIPT_URL);
                 const data = await res.json();
-                if (data && data.length > 0) { 
-                    tenants = data; 
+                if (data && data.length > 0) {
+                    tenants = data;
                     localStorage.setItem('tenants', JSON.stringify(tenants));
                     render();
                 }
-            } catch (e) { console.log("Load skipped: Using local data."); }
+            } catch (e) { console.warn("Using cached data."); }
         }
-
-        // --- CORE ACTIONS ---
 
         function registerTenant() {
             const fields = ['propName', 'tenantName', 'tenantPhone', 'rentAmount', 'startDate', 'leaseTerm'];
             const [prop, name, phone, rent, date, term] = fields.map(id => document.getElementById(id).value);
-            
-            if (!prop || !name || !rent || !date) return alert("Missing info!");
+            if (!prop || !name || !rent || !date) return alert("Fill all fields!");
 
             tenants.push({ id: Date.now(), property: prop, name, phone, rent: parseFloat(rent), lastPaid: date, term: parseInt(term) });
-            
-            // UI Updates + Local Save + Cloud Sync
             localStorage.setItem('tenants', JSON.stringify(tenants));
             render();
-            triggerAutoSync(); // Automation triggered here
-
+            triggerAutoSync();
             fields.forEach(id => document.getElementById(id).value = (id === 'leaseTerm' ? 1 : ""));
         }
 
         function deleteTenant(id) {
-            if (confirm("Delete entry and update cloud?")) {
+            if (confirm("Delete this record permanently?")) {
                 tenants = tenants.filter(t => t.id !== id);
                 localStorage.setItem('tenants', JSON.stringify(tenants));
                 render();
-                triggerAutoSync(); // Automation triggered here
+                triggerAutoSync();
             }
         }
 
@@ -130,13 +127,13 @@
             const total = tenants.reduce((acc, t) => acc + t.rent, 0);
             
             document.getElementById('totalPortfolio').innerText = `₦${total.toLocaleString(undefined, {minimumFractionDigits: 2})}`;
-            document.getElementById('unitCount').innerText = `${tenants.length} Units`;
+            document.getElementById('unitCount').innerText = tenants.length;
 
             const filtered = tenants.filter(t => t.name.toLowerCase().includes(search) || t.property.toLowerCase().includes(search));
             const list = document.getElementById('tenantList');
 
             if (filtered.length === 0) {
-                list.innerHTML = `<div class="p-20 text-center bg-white rounded-3xl border-2 border-dashed border-slate-200 text-slate-300 font-bold uppercase">No Tenants Recorded</div>`;
+                list.innerHTML = `<div class="p-20 text-center bg-white rounded-3xl border-2 border-dashed border-slate-200 text-slate-300 font-bold uppercase tracking-widest">No Active Records</div>`;
                 return;
             }
 
@@ -144,17 +141,20 @@
                 const due = new Date(t.lastPaid);
                 due.setFullYear(due.getFullYear() + t.term);
                 const expired = due < new Date();
+                
                 return `
-                    <div class="bg-white p-5 rounded-2xl shadow-sm border-l-8 ${expired ? 'border-red-500' : 'border-green-600'} flex justify-between items-center transition-all">
-                        <div>
-                            <span class="text-[9px] font-black bg-slate-100 px-2 py-1 rounded uppercase">${t.property}</span>
-                            <h3 class="text-lg font-black text-slate-800 uppercase">${t.name}</h3>
-                            <p class="text-green-700 font-bold">₦${t.rent.toLocaleString()}</p>
-                            <p class="text-[10px] ${expired ? 'text-red-600' : 'text-slate-400'} font-bold">EXP: ${due.toDateString()}</p>
+                    <div class="bg-white p-5 rounded-2xl shadow-sm border-l-8 ${expired ? 'border-red-500' : 'border-green-600'} flex justify-between items-center group">
+                        <div class="flex-1">
+                            <span class="text-[8px] font-black bg-slate-100 text-slate-500 px-2 py-0.5 rounded-full uppercase tracking-tighter">${t.property}</span>
+                            <h3 class="text-lg font-black text-slate-800 uppercase leading-tight mt-1">${t.name}</h3>
+                            <div class="flex gap-4 mt-1">
+                                <p class="text-green-700 font-black text-sm">₦${t.rent.toLocaleString()}</p>
+                                <p class="text-[10px] ${expired ? 'text-red-600' : 'text-slate-400'} font-bold uppercase">Expires: ${due.toDateString()}</p>
+                            </div>
                         </div>
                         <div class="flex gap-2">
-                            <button onclick="window.open('https://wa.me/${t.phone}')" class="bg-green-50 text-green-600 p-2 px-4 rounded-xl font-black text-[10px] uppercase active:scale-90 transition">WhatsApp</button>
-                            <button onclick="deleteTenant(${t.id})" class="bg-red-50 text-red-500 p-2 px-4 rounded-xl font-bold">🗑️</button>
+                            <button onclick="window.open('https://wa.me/${t.phone}')" class="bg-green-50 text-green-600 p-2 px-4 rounded-xl font-black text-[10px] uppercase hover:bg-green-100">WhatsApp</button>
+                            <button onclick="deleteTenant(${t.id})" class="text-slate-200 hover:text-red-500 transition-colors p-2">🗑️</button>
                         </div>
                     </div>
                 `;
