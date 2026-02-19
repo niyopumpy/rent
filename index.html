@@ -3,8 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Shollyven Properties | ERP Manager</title>
+    <title>Shollyven Properties | Enterprise ERP</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @media print {
+            body * { visibility: hidden; }
+            #receiptModal, #receiptModal * { visibility: visible; }
+            #receiptModal { position: absolute; left: 0; top: 0; width: 100%; border: none; }
+            .no-print { display: none; }
+        }
+    </style>
 </head>
 <body class="bg-slate-50 text-slate-900 font-sans p-4 lg:p-8">
 
@@ -12,20 +20,20 @@
         <header class="flex flex-col md:flex-row justify-between items-center mb-8 bg-white p-6 rounded-3xl shadow-sm border-b-8 border-green-700">
             <div>
                 <h1 class="text-3xl font-black text-green-900 tracking-tighter uppercase">Shollyven Properties</h1>
-                <p id="syncStatus" class="text-[10px] font-bold text-slate-400 mt-1 uppercase italic">Auto-Sync Enabled</p>
+                <p id="syncStatus" class="text-[10px] font-bold text-slate-400 mt-1 uppercase italic">Automatic Cloud Ledger Active</p>
             </div>
             <div class="flex gap-2 mt-4 md:mt-0">
-                <button onclick="showSection('buildings')" class="bg-slate-800 text-white px-5 py-2.5 rounded-xl font-bold text-sm hover:bg-black transition">🏢 Manage Buildings</button>
-                <button onclick="showSection('tenants')" class="bg-green-700 text-white px-5 py-2.5 rounded-xl font-bold text-sm hover:bg-green-800 transition">👥 Manage Tenants</button>
+                <button onclick="showSection('buildings')" class="bg-slate-800 text-white px-5 py-2.5 rounded-xl font-bold text-xs hover:bg-black transition">🏢 BUILDINGS</button>
+                <button onclick="showSection('tenants')" class="bg-green-700 text-white px-5 py-2.5 rounded-xl font-bold text-xs hover:bg-green-800 transition">👥 TENANTS</button>
             </div>
         </header>
 
         <section id="buildingsSection" class="hidden">
             <div class="grid lg:grid-cols-3 gap-8">
                 <div class="bg-white p-6 rounded-2xl shadow-md border border-slate-100 h-fit">
-                    <h2 class="font-black uppercase text-slate-400 text-[10px] mb-4 tracking-widest">Register New Property Asset</h2>
-                    <input id="newBldgName" type="text" placeholder="Building Name (e.g. Shollyven Plaza)" class="w-full bg-slate-50 p-4 rounded-xl mb-3 outline-none focus:ring-2 ring-green-500">
-                    <button onclick="addBuilding()" class="w-full bg-slate-900 text-white py-4 rounded-xl font-black uppercase text-xs hover:bg-black">Add to Portfolio</button>
+                    <h2 class="font-black uppercase text-slate-400 text-[10px] mb-4 tracking-widest">Register Property Asset</h2>
+                    <input id="newBldgName" type="text" placeholder="Building Name" class="w-full bg-slate-50 p-4 rounded-xl mb-3 outline-none focus:ring-2 ring-green-500">
+                    <button onclick="addBuilding()" class="w-full bg-slate-900 text-white py-4 rounded-xl font-black uppercase text-xs hover:bg-black">Add Asset</button>
                 </div>
                 <div class="lg:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-4" id="buildingsList"></div>
             </div>
@@ -34,38 +42,58 @@
         <section id="tenantsSection">
             <div class="grid lg:grid-cols-3 gap-8">
                 <div class="bg-white p-6 rounded-2xl shadow-md border border-slate-100 h-fit">
-                    <h2 class="font-black uppercase text-slate-400 text-[10px] mb-4 tracking-widest">Execute New Lease Agreement</h2>
+                    <h2 class="font-black uppercase text-slate-400 text-[10px] mb-4 tracking-widest">New Tenancy Setup</h2>
                     <select id="tBldgSelect" class="w-full bg-slate-50 p-4 rounded-xl mb-3 font-bold text-green-700 outline-none"></select>
-                    <input id="tName" type="text" placeholder="Tenant Legal Name" class="w-full bg-slate-50 p-4 rounded-xl mb-3 outline-none">
-                    <input id="tPhone" type="text" placeholder="WhatsApp Number (e.g. 234...)" class="w-full bg-slate-50 p-4 rounded-xl mb-3 outline-none">
-                    <input id="tRent" type="number" placeholder="Agreed Rent (₦)" class="w-full bg-slate-50 p-4 rounded-xl mb-3 outline-none font-bold">
-                    
+                    <input id="tName" type="text" placeholder="Tenant Full Name" class="w-full bg-slate-50 p-4 rounded-xl mb-3 outline-none">
+                    <input id="tPhone" type="text" placeholder="WhatsApp Number" class="w-full bg-slate-50 p-4 rounded-xl mb-3 outline-none">
+                    <input id="tRent" type="number" placeholder="Rent Amount (₦)" class="w-full bg-slate-50 p-4 rounded-xl mb-3 outline-none font-bold">
                     <div class="grid grid-cols-2 gap-2 mb-4">
-                        <div class="flex flex-col">
-                            <label class="text-[9px] font-bold text-slate-400 uppercase ml-2">Lease Period (Yrs)</label>
-                            <input id="tTerm" type="number" value="1" class="bg-slate-50 p-4 rounded-xl text-center font-bold">
-                        </div>
-                        <div class="flex flex-col">
-                            <label class="text-[9px] font-bold text-slate-400 uppercase ml-2">Commencement</label>
-                            <input id="tDate" type="date" class="bg-slate-50 p-4 rounded-xl text-xs font-bold">
-                        </div>
+                        <div class="flex flex-col"><label class="text-[9px] font-bold text-slate-400 uppercase ml-2">Period (Yrs)</label><input id="tTerm" type="number" value="1" class="bg-slate-50 p-4 rounded-xl text-center font-bold"></div>
+                        <div class="flex flex-col"><label class="text-[9px] font-bold text-slate-400 uppercase ml-2">Start Date</label><input id="tDate" type="date" class="bg-slate-50 p-4 rounded-xl text-xs font-bold"></div>
                     </div>
-                    <button onclick="addTenant()" class="w-full bg-green-700 text-white py-4 rounded-xl font-black uppercase text-xs hover:bg-green-900">Sign Lease & Sync</button>
+                    <button onclick="addTenant()" class="w-full bg-green-700 text-white py-4 rounded-xl font-black uppercase text-xs">Register Tenant</button>
                 </div>
-                
                 <div class="lg:col-span-2 space-y-4">
-                    <div class="flex gap-2 mb-4">
-                        <input id="search" onkeyup="render()" type="text" placeholder="🔍 Search by Building or Tenant..." class="flex-1 p-5 rounded-2xl bg-white shadow-sm outline-none focus:ring-4 ring-green-100 font-medium">
-                    </div>
+                    <input id="search" onkeyup="render()" type="text" placeholder="🔍 Search records..." class="w-full p-5 rounded-2xl bg-white shadow-sm outline-none mb-4 focus:ring-4 ring-green-100">
                     <div id="tenantList" class="space-y-4"></div>
                 </div>
             </div>
         </section>
     </div>
 
+    <div id="receiptModal" class="fixed inset-0 bg-white z-50 hidden flex-col p-8 max-w-2xl mx-auto border-2 border-slate-200 shadow-2xl overflow-y-auto">
+        <div class="flex justify-between border-b-4 border-green-700 pb-4 mb-6">
+            <div>
+                <h1 class="text-2xl font-black text-green-800 uppercase">SHOLLYVEN PROPERTIES</h1>
+                <p class="text-xs font-bold text-slate-500">Official Rent Payment Receipt</p>
+            </div>
+            <div class="text-right">
+                <p class="text-[10px] font-bold uppercase text-slate-400">Receipt No:</p>
+                <p id="recNo" class="font-bold text-sm">#0000</p>
+            </div>
+        </div>
+        <div class="grid grid-cols-2 gap-8 mb-8">
+            <div><p class="text-[10px] uppercase font-bold text-slate-400">Tenant Name</p><p id="recTenant" class="font-black text-lg uppercase"></p></div>
+            <div><p class="text-[10px] uppercase font-bold text-slate-400">Property Asset</p><p id="recBldg" class="font-black text-lg uppercase"></p></div>
+            <div><p class="text-[10px] uppercase font-bold text-slate-400">Payment Date</p><p id="recDate" class="font-bold"></p></div>
+            <div><p class="text-[10px] uppercase font-bold text-slate-400">Lease Period</p><p id="recPeriod" class="font-bold"></p></div>
+        </div>
+        <div class="bg-slate-50 p-6 rounded-2xl mb-8">
+            <p class="text-[10px] uppercase font-bold text-slate-400 text-center mb-2">Total Amount Paid</p>
+            <h2 id="recAmount" class="text-4xl font-black text-center text-green-700">₦0.00</h2>
+        </div>
+        <div class="mt-auto border-t pt-4 text-center">
+            <p class="text-[10px] text-slate-400 font-bold italic">Thank you for choosing Shollyven Properties. This is an electronically generated receipt.</p>
+            <div class="flex gap-4 justify-center mt-6 no-print">
+                <button onclick="window.print()" class="bg-slate-900 text-white px-8 py-3 rounded-xl font-bold uppercase text-xs">Print / Save PDF</button>
+                <button onclick="closeReceipt()" class="bg-slate-200 text-slate-600 px-8 py-3 rounded-xl font-bold uppercase text-xs">Close</button>
+            </div>
+        </div>
+    </div>
+
     <script>
         const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbybBAHxP6vU7CyGbqgCVIsKyYrIH0HcTHDQcyJByLrdnyirCT865AkNkurmQHW-wFFG/exec";
-        let data = JSON.parse(localStorage.getItem('shollyven_erp')) || { buildings: [], tenants: [] };
+        let data = JSON.parse(localStorage.getItem('shollyven_erp_v2')) || { buildings: [], tenants: [] };
 
         window.onload = async () => { render(); await syncFromCloud(); };
 
@@ -77,11 +105,11 @@
 
         async function triggerSync() {
             if (SCRIPT_URL.includes("PASTE_YOUR")) return;
-            document.getElementById('syncStatus').innerText = "⏳ Syncing...";
+            document.getElementById('syncStatus').innerText = "⏳ Cloud Syncing...";
             try {
                 await fetch(SCRIPT_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify(data) });
-                document.getElementById('syncStatus').innerText = "✅ Cloud Backup Secure: " + new Date().toLocaleTimeString();
-            } catch (e) { document.getElementById('syncStatus').innerText = "⚠️ Offline: Saving Locally"; }
+                document.getElementById('syncStatus').innerText = "✅ Cloud Secure: " + new Date().toLocaleTimeString();
+            } catch (e) { document.getElementById('syncStatus').innerText = "⚠️ Offline Mode"; }
         }
 
         async function syncFromCloud() {
@@ -89,34 +117,23 @@
             try {
                 const res = await fetch(SCRIPT_URL);
                 const cloudData = await res.json();
-                if (cloudData && (cloudData.buildings || cloudData.tenants)) {
-                    data = cloudData;
-                    localStorage.setItem('shollyven_erp', JSON.stringify(data));
-                    render();
-                }
-            } catch (e) { console.log("Cloud pull skipped."); }
+                if (cloudData) { data = cloudData; saveLocally(); render(); }
+            } catch (e) { console.warn("Cloud pull unavailable."); }
         }
 
         function addBuilding() {
             const name = document.getElementById('newBldgName').value;
-            if (!name) return alert("Building name required");
+            if (!name) return;
             data.buildings.push({ id: Date.now(), name });
             saveAndRefresh();
             document.getElementById('newBldgName').value = "";
-        }
-
-        function deleteBuilding(id) {
-            if (confirm("Delete this property? All associated tenants will be unassigned.")) {
-                data.buildings = data.buildings.filter(b => b.id !== id);
-                saveAndRefresh();
-            }
         }
 
         function addTenant() {
             const bldg = document.getElementById('tBldgSelect').value;
             const name = document.getElementById('tName').value;
             const rent = document.getElementById('tRent').value;
-            if (!bldg || !name || !rent) return alert("Select a Building and enter Tenant details!");
+            if (!bldg || !name || !rent) return alert("Missing Info!");
 
             data.tenants.push({ 
                 id: Date.now(), buildingId: bldg, name, 
@@ -125,75 +142,75 @@
                 term: parseInt(document.getElementById('tTerm').value)
             });
             saveAndRefresh();
-            ['tName', 'tPhone', 'tRent', 'tDate'].forEach(id => document.getElementById(id).value = "");
         }
 
-        function deleteTenant(id) {
-            if (confirm("Confirm Tenant Move-out? This will delete the lease record permanently.")) {
-                data.tenants = data.tenants.filter(t => t.id !== id);
-                saveAndRefresh();
-            }
+        function renewRent(id) {
+            if (!confirm("Confirm Rent Renewal? This will shift the lease date forward.")) return;
+            data.tenants = data.tenants.map(t => {
+                if (t.id === id) {
+                    let d = new Date(t.date);
+                    d.setFullYear(d.getFullYear() + t.term);
+                    return { ...t, date: d.toISOString().split('T')[0] };
+                }
+                return t;
+            });
+            saveAndRefresh();
         }
 
-        function saveAndRefresh() {
-            localStorage.setItem('shollyven_erp', JSON.stringify(data));
-            render();
-            triggerSync();
+        function generateReceipt(id) {
+            const t = data.tenants.find(t => t.id === id);
+            const b = data.buildings.find(b => b.id == t.buildingId);
+            document.getElementById('recNo').innerText = `#SH-${t.id.toString().slice(-4)}`;
+            document.getElementById('recTenant').innerText = t.name;
+            document.getElementById('recBldg').innerText = b ? b.name : "N/A";
+            document.getElementById('recDate').innerText = new Date().toDateString();
+            document.getElementById('recPeriod').innerText = `${t.term} Year(s) starting ${t.date}`;
+            document.getElementById('recAmount').innerText = `₦${t.rent.toLocaleString(undefined, {minimumFractionDigits: 2})}`;
+            document.getElementById('receiptModal').classList.remove('hidden');
+            document.getElementById('receiptModal').classList.add('flex');
         }
+
+        function closeReceipt() { 
+            document.getElementById('receiptModal').classList.add('hidden'); 
+            document.getElementById('receiptModal').classList.remove('flex');
+        }
+
+        function deleteTenant(id) { if (confirm("Delete Tenant?")) { data.tenants = data.tenants.filter(t => t.id !== id); saveAndRefresh(); } }
+        function saveLocally() { localStorage.setItem('shollyven_erp_v2', JSON.stringify(data)); }
+        function saveAndRefresh() { saveLocally(); render(); triggerSync(); }
 
         function render() {
-            // Render Buildings
             const bList = document.getElementById('buildingsList');
             bList.innerHTML = data.buildings.map(b => `
-                <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex justify-between items-center group">
-                    <div>
-                        <h3 class="font-black text-xl uppercase tracking-tighter text-slate-800">${b.name}</h3>
-                        <p class="text-[10px] text-slate-400 font-bold uppercase">${data.tenants.filter(t => t.buildingId == b.id).length} Active Leases</p>
-                    </div>
-                    <button onclick="deleteBuilding(${b.id})" class="text-slate-300 hover:text-red-500 transition-colors">🗑️</button>
-                </div>
-            `).join('');
+                <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex justify-between items-center">
+                    <div><h3 class="font-black text-xl uppercase">${b.name}</h3><p class="text-[9px] font-bold text-slate-400 uppercase">${data.tenants.filter(t => t.buildingId == b.id).length} Units</p></div>
+                    <button onclick="if(confirm('Delete Building?')) {data.buildings=data.buildings.filter(x=>x.id!==${b.id}); saveAndRefresh();}" class="text-slate-200 hover:text-red-500">🗑️</button>
+                </div>`).join('');
 
-            // Dropdown Update
             const select = document.getElementById('tBldgSelect');
-            select.innerHTML = '<option value="">-- Select Asset Building --</option>' + 
-                data.buildings.map(b => `<option value="${b.id}">${b.name}</option>`).join('');
+            select.innerHTML = '<option value="">-- Select Asset --</option>' + data.buildings.map(b => `<option value="${b.id}">${b.name}</option>`).join('');
 
-            // Tenant Rendering
             const search = document.getElementById('search').value.toLowerCase();
-            const filtered = data.tenants.filter(t => {
-                const b = data.buildings.find(b => b.id == t.buildingId);
-                return t.name.toLowerCase().includes(search) || (b && b.name.toLowerCase().includes(search));
-            });
-
+            const filtered = data.tenants.filter(t => t.name.toLowerCase().includes(search));
             const tList = document.getElementById('tenantList');
-            if (filtered.length === 0) {
-                tList.innerHTML = `<div class="p-20 text-center bg-white rounded-3xl border-2 border-dashed border-slate-200 text-slate-300 font-black uppercase">Zero Active Records</div>`;
-                return;
-            }
 
             tList.innerHTML = filtered.map(t => {
-                const bldg = data.buildings.find(b => b.id == t.buildingId);
-                const expiry = new Date(t.date);
-                expiry.setFullYear(expiry.getFullYear() + t.term);
-                const isOverdue = expiry < new Date();
-
+                const b = data.buildings.find(b => b.id == t.buildingId);
+                const exp = new Date(t.date); exp.setFullYear(exp.getFullYear() + t.term);
+                const isOverdue = exp < new Date();
                 return `
-                    <div class="bg-white p-6 rounded-2xl shadow-sm border-l-8 ${isOverdue ? 'border-red-500' : 'border-green-600'} flex justify-between items-center transition-all hover:shadow-md">
-                        <div>
-                            <span class="text-[8px] font-black bg-slate-100 text-slate-500 px-2 py-0.5 rounded uppercase">${bldg ? bldg.name : 'Unknown Building'}</span>
-                            <h3 class="text-xl font-black uppercase text-slate-800 mt-1">${t.name}</h3>
-                            <div class="flex gap-4 items-center">
-                                <p class="text-green-700 font-black">₦${t.rent.toLocaleString(undefined, {minimumFractionDigits: 2})}</p>
-                                <p class="text-[9px] font-bold text-slate-400 uppercase tracking-widest">Expires: ${expiry.toDateString()}</p>
-                            </div>
-                        </div>
-                        <div class="flex gap-2">
-                            <button onclick="window.open('https://wa.me/${t.phone}')" class="bg-green-50 text-green-700 px-4 py-2 rounded-xl font-black text-[10px] uppercase hover:bg-green-100">WhatsApp</button>
-                            <button onclick="deleteTenant(${t.id})" class="text-slate-200 hover:text-red-500 p-2 transition-colors">🗑️</button>
-                        </div>
+                <div class="bg-white p-5 rounded-2xl shadow-sm border-l-8 ${isOverdue ? 'border-red-500' : 'border-green-600'} flex justify-between items-center">
+                    <div>
+                        <span class="text-[8px] font-black bg-slate-100 text-slate-400 px-2 py-0.5 rounded uppercase">${b ? b.name : 'Asset'}</span>
+                        <h3 class="text-lg font-black uppercase text-slate-800">${t.name}</h3>
+                        <p class="text-green-700 font-bold text-sm">₦${t.rent.toLocaleString()}</p>
                     </div>
-                `;
+                    <div class="flex gap-2">
+                        <button onclick="renewRent(${t.id})" class="bg-indigo-50 text-indigo-600 px-3 py-2 rounded-xl font-bold text-[10px] uppercase">Renew</button>
+                        <button onclick="generateReceipt(${t.id})" class="bg-slate-900 text-white px-3 py-2 rounded-xl font-bold text-[10px] uppercase">Receipt</button>
+                        <button onclick="deleteTenant(${t.id})" class="text-slate-200 hover:text-red-500">🗑️</button>
+                    </div>
+                </div>`;
             }).join('');
         }
     </script>
